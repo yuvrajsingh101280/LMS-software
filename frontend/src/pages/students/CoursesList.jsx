@@ -1,7 +1,7 @@
 import React from "react";
 
 const CoursesList = () => {
-  return <div></div>;
+  return <div>course list</div>;
 };
 
 export default CoursesList;
