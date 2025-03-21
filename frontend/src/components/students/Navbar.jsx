@@ -18,8 +18,8 @@ const Navbar = () => {
       />
       {/* desktop view */}
       <div className="hidden md:flex items-center gap-5 text-grey-500">
-        <div>
-          <button>Become Educator</button>
+        <div className="flex items-center gap-5">
+          <button className="cursor-pointer">Become Educator</button> |
           <Link to={"/my-enrollments"}>My Enrollments</Link>
         </div>
         <button className="bg-blue-600 cursor-pointer text-white px-5 py-2 rounded-full">
@@ -27,7 +27,7 @@ const Navbar = () => {
         </button>
       </div>
       {/* mobile view */}
-      <div></div>
+      <div className="md:hidden"></div>
     </div>
   );
 };
