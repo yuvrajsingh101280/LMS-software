@@ -1,7 +1,7 @@
 import React from "react";
 
 const MyEnrollments = () => {
-  return <div></div>;
+  return <div>Enrollments</div>;
 };
 
 export default MyEnrollments;
