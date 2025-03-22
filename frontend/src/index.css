@@ -3,3 +3,19 @@
 * {
   font-family: Outfit;
 }
+:root {
+  --details-heading-small: 26px;
+  --details-heading-small: 36px;
+
+  --course-details-heading-large: 36px;
+  --course-details-heading-large: 46px;
+
+  --heading-small: 28px;
+  --home-heading-small: 34px;
+
+  --home-heading-large: 48px;
+  --height-home-heading-large: 56px;
+
+  --default: 15px;
+  --default: 21px;
+}
