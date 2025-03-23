@@ -1,9 +1,10 @@
 import React from "react";
 import { assets } from "../../assets/assets";
+import SearchBar from "./SearchBar";
 const Hero = () => {
   return (
-    <div className="flex flex-col items-center justify-center w-full md:pt-36 pt-20 px-7 md:px-0 space-y-7 text-center bg-gradient-to-b from-green-200 via-white to-white">
-      <h1 className="md:text-[48px] text-[34px] relative font-bold text-gray-800 max-w-3xl mx-auto">
+    <div className="flex flex-col items-center justify-center w-full md:pt-30 pt-20 px-7 md:px-0 space-y-7 text-center bg-gradient-to-b from-green-200 via-white to-white">
+      <h1 className="md:text-[48px] text-[34px] relative font-bold text-gray-800 max-w-4xl mx-auto">
         Unlock new possibilities with courses that
         <span className="text-blue-600"> align with your ambitions.</span>
         <img
@@ -22,6 +23,7 @@ const Hero = () => {
         we bring together world-class instructors to help ypu achieve your
         professional goals
       </p>
+      <SearchBar />
     </div>
   );
 };
