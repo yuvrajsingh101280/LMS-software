@@ -19,3 +19,8 @@
   --default: 15px;
   --default: 21px;
 }
+@layer utilities {
+  .auto {
+    grid: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}

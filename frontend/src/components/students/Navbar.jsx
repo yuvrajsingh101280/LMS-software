@@ -1,22 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { assets } from "../../assets/assets";
 import { Link } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+import { Appcontext } from "../../context/AppContext";
 const Navbar = () => {
   const isCourseListPage = location.pathname.includes("/course-list");
 
   const { openSignIn } = useClerk(); //open signin modal
 
   const { user } = useUser();
-
+  const { navigate } = useContext(Appcontext);
   return (
     <div
-      className={`flex items-center fixed w-full z-1 justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-gray-500 py-4 ${
-        isCourseListPage ? "bg-white" : "bg-green-100"
+      className={`flex items-center  z-1 justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-gray-500 py-4 ${
+        isCourseListPage ? "bg-white" : "bg-green-200"
       }`}
     >
       <Link to={"/"}>
         <img
+          onClick={() => navigate("/")}
           src={assets.logo}
           alt="Logo"
           className="w-28  lg:w-32 cursor-pointer"

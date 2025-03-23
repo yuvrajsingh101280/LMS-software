@@ -13,11 +13,11 @@ const CourseSection = () => {
       </h2>
       <p className="text-sm md:text-base text-gray-500 mt-3">
         Discover our top-rated courses across various categories. From coding
-        and design to business and wellness, our courses are crafted to deliver
-        results.
+        and design to <br />
+        business and wellness, our courses are crafted to deliver results.
       </p>
 
-      <div className="grid grid-cols-4 px-4 md:px-0 md:my-16 my-10 gap-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] px-4 md:px-0 md:my-16 my-10 gap-4">
         {allCourses.slice(0, 4).map((course, index) => (
           <CourseCard key={index} course={course} />
         ))}
@@ -26,7 +26,7 @@ const CourseSection = () => {
       <Link
         to={"/course-list"}
         onClick={() => scrollTo(0, 0)}
-        className="text-gray-500 border border-gray-500/30  px-10 py-3 rounded"
+        className="text-gray-500 border border-gray-500/60  hover:bg-blue-500 hover:text-white px-10 py-3 rounded"
       >
         Show all Courses
       </Link>
