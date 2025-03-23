@@ -19,7 +19,7 @@ const Navbar = () => {
         <img
           src={assets.logo}
           alt="Logo"
-          className="w-28 lg:w-32 cursor-pointer"
+          className="w-28  lg:w-32 cursor-pointer"
         />
       </Link>
       {/* desktop view */}
