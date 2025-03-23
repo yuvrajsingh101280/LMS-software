@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { assets } from "../../assets/assets";
+import { useNavigate } from "react-router-dom";
 const SearchBar = () => {
-  const navigate = usenavi;
+  const navigate = useNavigate();
+  const [input, setInput] = useState();
 
   return (
     <form
