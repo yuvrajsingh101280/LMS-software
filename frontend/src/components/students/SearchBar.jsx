@@ -30,7 +30,7 @@ const SearchBar = ({ data }) => {
       />
       <button
         type="submit"
-        className="bg-blue-600 rounded text-white md:px-10 cursor-pointer px-7 md:py-2 mx-1"
+        className="bg-blue-600 rounded text-white md:px-10 cursor-pointer px-7 md:py-2 py-2 mx-1"
       >
         Search
       </button>
