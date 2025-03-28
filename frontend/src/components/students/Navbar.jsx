@@ -9,7 +9,7 @@ const Navbar = () => {
   const { openSignIn } = useClerk(); //open signin modal
 
   const { user } = useUser();
-  const { navigate } = useContext(Appcontext);
+  const { navigate, isEducator, setIsEducator } = useContext(Appcontext);
   return (
     <div
       className={`flex items-center  z-1 justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-gray-500 py-4 ${
@@ -30,8 +30,13 @@ const Navbar = () => {
           {/* if the user is logged in then we will show these buttons */}
           {user && (
             <>
-              <button className="cursor-pointer">Become Educator</button> |
-              <Link to={"/my-enrollments"}>My Enrollments</Link>
+              <button
+                onClick={() => navigate("/educator")}
+                className="cursor-pointer"
+              >
+                {isEducator ? "Educator Dashboard" : "Become Educator"}
+              </button>{" "}
+              |<Link to={"/my-enrollments"}>My Enrollments</Link>
             </>
           )}
         </div>
@@ -51,8 +56,13 @@ const Navbar = () => {
         <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
           {user && (
             <>
-              <button className="cursor-pointer">Become Educator</button> |
-              <Link to={"/my-enrollments"}>My Enrollments</Link>
+              <button
+                onClick={() => navigate("/educator")}
+                className="cursor-pointer"
+              >
+                {isEducator ? "Educator Dashboard" : "Become Educator"}
+              </button>{" "}
+              |<Link to={"/my-enrollments"}>My Enrollments</Link>
             </>
           )}
         </div>
