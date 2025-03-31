@@ -67,22 +67,21 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Social Media Links */}
-        <div className="w-full md:w-1/4 flex flex-col">
-          <h3 className="text-lg font-semibold mb-3">Follow Us</h3>
-          <div className="flex gap-4">
-            <a href="#" className="text-gray-300 hover:text-white text-xl">
-              <FaFacebookF />
-            </a>
-            <a href="#" className="text-gray-300 hover:text-white text-xl">
-              <FaTwitter />
-            </a>
-            <a href="#" className="text-gray-300 hover:text-white text-xl">
-              <FaInstagram />
-            </a>
-            <a href="#" className="text-gray-300 hover:text-white text-xl">
-              <FaLinkedinIn />
-            </a>
+        {/* Subscribe Section */}
+        <div className="w-full md:w-1/4">
+          <h3 className="text-lg font-semibold mb-3">Subscribe</h3>
+          <p className="text-gray-300 mb-3">
+            Stay updated with the latest real estate news and offers.
+          </p>
+          <div className="flex flex-col gap-5 items-center  rounded-lg overflow-hidden">
+            <input
+              type="email"
+              placeholder="Enter your mail"
+              className="w-full p-2 text-gray-900 outline bg-white border-2 border-e-blue-50"
+            />
+            <button className="bg-blue-600  hover:bg-blue-700 text-white px-4 py-2">
+              Submit
+            </button>
           </div>
         </div>
       </div>
