@@ -52,10 +52,11 @@ export const AppContextPovider = ({ children }) => {
     let totalLectures = 0;
     course.courseContent.forEach((chapter) => {
       if (Array.isArray(chapter.chapterContent)) {
+        //ensures whether the lecure is present in each chapter
         totalLectures += chapter.chapterContent.length;
       }
     });
-    return calculateNoOfLectures;
+    return totalLectures;
   };
   useEffect(() => {
     fetchAllCourses();

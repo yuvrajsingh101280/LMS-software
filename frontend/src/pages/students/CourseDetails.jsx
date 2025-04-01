@@ -7,7 +7,13 @@ import { assets } from "../../assets/assets";
 const CourseDetails = () => {
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
-  const { allCourses, calculateRating } = useContext(Appcontext);
+  const {
+    allCourses,
+    calculateRating,
+    calculateCourseDuration,
+    calculateNoOfLectures,
+    calculateChapterTime,
+  } = useContext(Appcontext);
 
   console.log(courseData);
 
@@ -66,6 +72,7 @@ const CourseDetails = () => {
           <p className="text-sm">
             course by <span className="text-blue-600">Yuvraj singh</span>
           </p>
+          <div className="pt-8 text-gray-800"></div>
         </div>
 
         {/* Right Column (Empty for Now) */}
