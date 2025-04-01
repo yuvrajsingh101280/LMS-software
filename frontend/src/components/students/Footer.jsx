@@ -13,8 +13,8 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row items-start px-8 md:px-36 justify-center gap-10 md:gap-32 py-10 border-b border-white/30">
         {/* Logo & About Section */}
         <div className="flex flex-col md:items-start items-center w-full md:w-1/4">
-          <img src={assets.logo_dark} alt="Company Logo" className="w-40" />
-          <p className="mt-4 text-center md:text-left text-gray-300">
+          <h1 className="text-lg md:text-3xl text-bold text-white">ACADEMIX</h1>
+          <p className="mt-4 text-center md:text-left text-gray-200/30 ">
             Find your dream home with us. We provide the best real estate deals
             across the city, offering modern living spaces that match your
             lifestyle.
