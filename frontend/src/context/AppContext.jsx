@@ -39,13 +39,15 @@ export const AppContextPovider = ({ children }) => {
 
   // function to calculate the duration of the course
 
+  // function to calculate the duration of the course
   const calculateCourseDuration = (course) => {
     let time = 0;
     course.courseContent.map((chapter) =>
       chapter.chapterContent.map((lecture) => (time += lecture.lectureDuration))
     );
-    return humanizedDuration(time * 60 * 1000), { units: ["h", "m"] };
+    return humanizedDuration(time * 60 * 1000, { units: ["h", "m"] });
   };
+
   // function to calculate number of lecture in the course
 
   const calculateNoOfLectures = (course) => {

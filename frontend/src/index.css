@@ -25,6 +25,18 @@
 } */
 
   /* --rich-text: */
+
+  /* "maxwidth:{
+"course-card":"424px"
+}"
+boxshadow:{
+
+"custom-card":"0px 4px 15px 2px rgba(0,0,0,0.1)"
+
+
+
+
+ */
 }
 @layer utilities {
   .auto {

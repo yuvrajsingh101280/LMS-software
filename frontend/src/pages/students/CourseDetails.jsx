@@ -9,8 +9,15 @@ const CourseDetails = () => {
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
   const [openSections, setOpenSections] = useState({});
-  const { allCourses, calculateRating, calculateChapterTime } =
-    useContext(Appcontext);
+  const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false);
+  const {
+    allCourses,
+    calculateRating,
+    calculateChapterTime,
+    calculateCourseDuration,
+    currency,
+    calculateNoOfLectures,
+  } = useContext(Appcontext);
 
   // Fetch Course Data inside useEffect
   useEffect(() => {
@@ -174,8 +181,54 @@ const CourseDetails = () => {
         </div>
 
         {/* Right Column (Empty for Now) */}
-        <div className="flex-1">
-          {/* Add right-side content here if needed */}
+        <div className="max-w-[424px] z-10 shadow-lg rounded-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]">
+          <img src={courseData.courseThumbnail} alt="" />
+          <div className="p-5">
+            <div className="flex items-center gap-2">
+              <img
+                src={assets.time_left_clock_icon}
+                alt="time-left-clock icon"
+              />
+
+              <p className="text-red-500">
+                <span className="font-medium">5 days </span>left at this price!
+              </p>
+            </div>
+
+            <div className="flex gap-3 items-center pt-2">
+              <p className="text-gray-800 md:text-4xl text-2xl font-semibold">
+                {currency}
+                {(
+                  courseData.coursePrice -
+                  (courseData.discount * courseData.coursePrice) / 100
+                ).toFixed(2)}
+              </p>
+              <p className="md:text-lg text-gray-500 line-through">
+                {currency}
+                {courseData.coursePrice}
+              </p>
+              <p className="md:text-lg text-gray-500">
+                {courseData.discount}% Off
+              </p>
+            </div>
+
+            <div className="flex item-center text-sm md:text-default gap-4 pt-2 md:pt-4 text-gray-500">
+              <div className="flex items-center gap-1">
+                <img src={assets.star} alt="star" />
+                <p>{calculateRating(courseData)}</p>
+              </div>
+              <div className="h-4 w-px bg-gray-500/40"></div>
+              <div className="flex items-center gap-1">
+                <img src={assets.time_clock_icon} alt="star" />
+                <p>{calculateCourseDuration(courseData)}</p>
+              </div>
+              <div className="h-4 w-px bg-gra-500/40"></div>
+              <div className="flex items-center gap-1">
+                <img src={assets.lesson_icon} alt="star" />
+                <p>{calculateNoOfLectures(courseData)} lectures</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
