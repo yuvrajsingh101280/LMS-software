@@ -11,6 +11,7 @@ export const AppContextPovider = ({ children }) => {
 
   const [allCourses, setAllCourse] = useState([]);
   const [isEducator, setIsEducator] = useState(true);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
   // fetch all courses
   const fetchAllCourses = async () => {
@@ -60,8 +61,16 @@ export const AppContextPovider = ({ children }) => {
     });
     return totalLectures;
   };
+
+  // fetch user enrolled courses
+
+  const fetchUserEnrolledCourses = async () => {
+    setEnrolledCourses(dummyCourses);
+  };
+
   useEffect(() => {
     fetchAllCourses();
+    fetchUserEnrolledCourses();
   }, []);
   const value = {
     currency,
@@ -74,6 +83,8 @@ export const AppContextPovider = ({ children }) => {
     calculateChapterTime,
     calculateCourseDuration,
     calculateNoOfLectures,
+    enrolledCourses,
+    fetchUserEnrolledCourses,
   };
   return <Appcontext.Provider value={value}>{children}</Appcontext.Provider>;
 };
