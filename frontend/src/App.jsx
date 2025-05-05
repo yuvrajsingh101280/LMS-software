@@ -12,6 +12,7 @@ import StudentsEnrolled from "./pages/educator/StudentsEnrolled";
 import MyCourses from "./pages/educator/MyCourses";
 import AddCourse from "./pages/educator/AddCourse";
 import Navbar from "./components/students/Navbar";
+import "quill/dist/quill.snow.css";
 const App = () => {
   const location = useLocation();
 
