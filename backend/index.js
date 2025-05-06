@@ -12,13 +12,18 @@ connectToDatabase()
 // middlewares
 app.use(express.json())
 app.use(cors())
+// routes
+app.get("/", (req, res) => {
+
+    res.send("Hello world")
+
+})
 
 
 
 
 
-
-
+// port
 const port = process.env.PORT
 app.listen(port, () => {
 
@@ -27,9 +32,5 @@ app.listen(port, () => {
 
 
 })
-app.get("/", (req, res) => {
 
-    res.send("Hello world")
-
-})
 
