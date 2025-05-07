@@ -16,7 +16,11 @@ app.use(cors())
 // routes
 app.post("/clerk", clerkWebhook)
 
+app.get("/", (req, res) => {
 
+    res.send("Api is working ")
+
+})
 
 
 
