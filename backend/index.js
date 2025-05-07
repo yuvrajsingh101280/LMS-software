@@ -5,6 +5,7 @@ import connectToDatabase from "./database/db.js";
 import { clerkWebhook } from "./controllers/webhooks.js";
 import educatorRouter from "./routes/educatorRoute.js";
 import { clerkMiddleware } from "@clerk/express";
+import connectCloudinary from "./config/cloudinary.js";
 dotenv.config()
 
 // app instance 
@@ -32,7 +33,9 @@ app.get("/", (req, res) => {
 
 app.use("/api/educator", educatorRouter)
 
+// connect to cloudinary
 
+await connectCloudinary()
 
 // port
 const port = process.env.PORT
