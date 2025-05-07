@@ -8,7 +8,7 @@ dotenv.config()
 // app instance 
 const app = express();
 // connect to database
-connectToDatabase()
+await connectToDatabase()
 
 // middlewares
 app.use(express.json())
