@@ -8,7 +8,7 @@ export const clerkWebhook = async (req, res) => {
 
     try {
 
-        const payload = req.body
+        const payload = JSON.stringify(req.body)
         const headers = {
 
 
@@ -38,7 +38,8 @@ export const clerkWebhook = async (req, res) => {
 
                 }
                 await User.create(userData)
-                res.json({})
+                console.log("User created ", userData)
+                return res.status(200).json({ success: true, message: "user created" })
                 break;
 
             }
@@ -47,20 +48,22 @@ export const clerkWebhook = async (req, res) => {
 
                 const userData = {
 
-                    email: data.email_address[0].email_address,
+                    email: data.email_addresses[0].email_address,
                     name: data.first_name + " " + data.last_name,
                     imageUrl: data.image_url,
 
 
                 }
                 await User.findByIdAndUpdate(data.id, userData)
-                res.json({})
+                console.log("user updated", userData)
+                return res.status(200).json({ succes: true, message: "User updated successfully" })
                 break;
             }
             case "user.deleted": {
 
                 await User.findByIdAndDelete(data.id)
-                res.json({})
+                console.log("User deleted", data.id)
+                return res.status(200).json({ success: true, message: "User deleted" })
                 break;
 
 
@@ -68,13 +71,14 @@ export const clerkWebhook = async (req, res) => {
             }
 
             default:
+                return res.status(400).json({ success: false, message: "Unhandled event type" });
                 break;
         }
 
 
     } catch (error) {
-
-        res.json({ success: false, message: error.message })
+        console.log(error)
+        return res.status(500).json({ success: false, message: error.message });
 
 
     }
