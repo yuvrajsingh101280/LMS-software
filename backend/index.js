@@ -2,6 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
 import connectToDatabase from "./database/db.js";
+import { clerkWebhook } from "./controllers/webhooks.js";
 dotenv.config()
 
 // app instance 
@@ -13,11 +14,9 @@ connectToDatabase()
 app.use(express.json())
 app.use(cors())
 // routes
-app.get("/", (req, res) => {
+app.post("/clerk", clerkWebhook)
 
-    res.send("Hello world")
 
-})
 
 
 
