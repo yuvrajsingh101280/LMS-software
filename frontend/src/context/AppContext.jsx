@@ -3,11 +3,14 @@ import { createContext } from "react";
 import { dummyCourses } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import humanizedDuration from "humanize-duration";
+import { useAuth, useUser } from "@clerk/clerk-react";
 export const Appcontext = createContext();
 
 export const AppContextPovider = ({ children }) => {
   const currency = import.meta.env.VITE_CURRENCY;
   const navigate = useNavigate();
+  const { getToken } = useAuth();
+  const { user } = useUser();
 
   const [allCourses, setAllCourse] = useState([]);
   const [isEducator, setIsEducator] = useState(true);
@@ -72,6 +75,15 @@ export const AppContextPovider = ({ children }) => {
     fetchAllCourses();
     fetchUserEnrolledCourses();
   }, []);
+  const logToken = async () => {
+    console.log(await getToken());
+  };
+  useEffect(() => {
+    if (user) {
+      logToken();
+    }
+  }, [user]);
+
   const value = {
     currency,
     allCourses,

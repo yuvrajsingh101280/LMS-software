@@ -3,6 +3,8 @@ import dotenv from "dotenv"
 import cors from "cors"
 import connectToDatabase from "./database/db.js";
 import { clerkWebhook } from "./controllers/webhooks.js";
+import educatorRouter from "./routes/educatorRoute.js";
+import { clerkMiddleware } from "@clerk/express";
 dotenv.config()
 
 // app instance 
@@ -13,8 +15,14 @@ const app = express();
 // middlewares
 app.use(express.json())
 app.use(cors())
+app.use(clerkMiddleware())
+
+
 // routes
 app.post("/clerk", clerkWebhook)
+
+
+
 
 app.get("/", (req, res) => {
 
@@ -22,7 +30,7 @@ app.get("/", (req, res) => {
 
 })
 
-
+app.use("/api/educator", educatorRouter)
 
 
 
