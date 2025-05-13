@@ -103,25 +103,32 @@ export const dummyEducatorData = {
 
 export const dummyTestimonial = [
     {
-        name: 'Donald Jackman',
-        role: 'SWE 1 @ Amazon',
+        name: 'Piyush',
+        role: 'BCA Student @ Amity University',
         image: assets.profile_img_1,
         rating: 5,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'Academix se padhai kaafi easy ho gayi hai. Sab kuch ek jagah milta hai – lectures, notes aur quizzes. Mazaa aa gaya!',
     },
     {
-        name: 'Richard Nelson',
-        role: 'SWE 2 @ Samsung',
+        name: 'Alex',
+        role: 'MBA Aspirant @ BYJU\'S Prep',
         image: assets.profile_img_2,
         rating: 4,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'Pehle mujhe alag-alag jagah se padhna padta tha, ab Academix sab provide karta hai. Interface bhi smooth hai.',
     },
     {
-        name: 'James Washington',
-        role: 'SWE 2 @ Google',
+        name: 'Nikhil',
+        role: 'Full Stack Intern @ EdTech Startup',
         image: assets.profile_img_3,
         rating: 4.5,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'Academix ka course structure aur progress tracking feature bahut hi useful hai. Learning journey properly track ho jati hai.',
+    },
+    {
+        name: 'Yuvraj',
+        role: 'CS Undergrad @ Lovely Professional University',
+        image: assets.profile_img_1,
+        rating: 5,
+        feedback: 'Academix ka UI simple aur fast hai. Videos, assignments, sab kuch easily access ho jata hai. Definitely recommend karunga!',
     },
 ];
 

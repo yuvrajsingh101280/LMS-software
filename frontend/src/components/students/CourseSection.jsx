@@ -7,29 +7,28 @@ const CourseSection = () => {
   const { allCourses } = useContext(Appcontext);
 
   return (
-    <div className="py-16 md:px-40 px-8">
-      <h2 className="text-3xl font-medium text-gray-800">
-        Learn from the best
-      </h2>
-      <p className="text-sm md:text-base text-gray-500 mt-3">
-        Discover our top-rated courses across various categories. From coding
-        and design to <br />
-        business and wellness, our courses are crafted to deliver results.
+    <div className="py-16 md:px-36 px-6 bg-[#f8fafc]">
+      <h2 className="text-3xl font-bold text-gray-800">Learn from the best</h2>
+      <p className="text-sm md:text-base text-gray-600 mt-2">
+        Discover our top-rated courses across various categories. From coding,
+        design, and business to wellness – crafted to deliver real results.
       </p>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] px-4 md:px-0 md:my-16 my-10 gap-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] px-2 md:px-0 md:my-16 my-10 gap-6">
         {allCourses.slice(0, 4).map((course, index) => (
           <CourseCard key={index} course={course} />
         ))}
       </div>
 
-      <Link
-        to={"/course-list"}
-        onClick={() => scrollTo(0, 0)}
-        className="text-gray-500 border border-gray-500/60  hover:bg-blue-500 hover:text-white px-10 py-3 rounded"
-      >
-        Show all Courses
-      </Link>
+      <div className="text-center mt-10">
+        <Link
+          to="/course-list"
+          onClick={() => scrollTo(0, 0)}
+          className="text-white bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full transition duration-200"
+        >
+          Show All Courses
+        </Link>
+      </div>
     </div>
   );
 };
