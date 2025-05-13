@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const CallToAction = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col items-center gap-5 pt-16 pb-24 px-6 md:px-0 bg-gradient-to-b from-blue-50 to-white text-center">
+    <div className="flex flex-col items-center gap-5 pt-16 pb-24 px-6 w-full md:px-0 bg-gradient-to-b from-blue-50 to-white text-center">
       <h1 className="text-3xl md:text-5xl text-blue-800 font-bold max-w-2xl leading-tight">
         Unlock Your Potential with Academix
       </h1>
