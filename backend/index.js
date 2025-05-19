@@ -14,7 +14,6 @@ const app = express();
 // await connectToDatabase()
 
 // middlewares
-
 app.use(express.json())
 app.use(cors())
 app.use(clerkMiddleware())
@@ -26,7 +25,11 @@ app.post("/clerk", clerkWebhook)
 
 
 
+app.get("/", (req, res) => {
 
+    res.send("Api is working ")
+
+})
 
 app.use("/api/educator", educatorRouter)
 
