@@ -8,7 +8,8 @@ export const clerkWebhook = async (req, res) => {
 
     try {
 
-        const payload = JSON.stringify(req.body)
+        const payload = req.body.toString("utf8")
+        console.log(payload)
         const headers = {
 
 
@@ -49,7 +50,7 @@ export const clerkWebhook = async (req, res) => {
 
                 const userData = {
 
-                    email: data.email_addresses[0].email_address,
+                    email: data.email_addresses[0]?.email_address,
                     name: data.first_name + " " + data.last_name,
                     imageUrl: data.image_url,
 
@@ -57,7 +58,7 @@ export const clerkWebhook = async (req, res) => {
                 }
                 await User.findByIdAndUpdate(data.id, userData)
                 console.log("user updated", userData)
-                return res.status(200).json({ succes: true, message: "User updated successfully" })
+                return res.status(200).json({ success: true, message: "User updated successfully" })
                 break;
             }
             case "user.deleted": {
