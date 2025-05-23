@@ -10,7 +10,7 @@ const lectureSchema = new mongoose.Schema({
     lectureDuration: { type: Number, required: true },
     lectureUrl: { type: String, required: true },
     isPreviewFree: { type: Boolean, required: true },
-    lectureOrder: { type: Number, requried: true }
+    lectureOrder: { type: Number, required: true }
 
 
 }, { _id: false })
@@ -18,7 +18,7 @@ const lectureSchema = new mongoose.Schema({
 
 const chapterSchema = new mongoose.Schema({
 
-    chapterId: { type: String, requied: true },
+    chapterId: { type: String, required: true },
     chapterOrder: { type: Number, required: true },
     chapterTitle: { type: String, required: true },
     chapterContent: [lectureSchema],
