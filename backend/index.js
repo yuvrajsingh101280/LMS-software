@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json())
 app.use(cors())
 app.use(clerkMiddleware())
-
+app.use(requireAuth())
 
 // routes
 app.post("/clerk", express.raw({ type: "application/json" }), clerkWebhook)
@@ -30,13 +30,13 @@ app.get("/", (req, res) => {
     res.send("Api is working ")
 
 })
-app.get("/me", requireAuth(), (req, res) => {
+// app.get("/me", requireAuth(), (req, res) => {
 
 
 
-    console.log("Authenticated user", req.auth.userId)
-    res.send(req.auth.userId)
-})
+//     console.log("Authenticated user", req.auth.userId)
+//     res.send(req.auth.userId)
+// })
 app.use("/api/educator", educatorRouter)
 
 // connect to cloudinary
