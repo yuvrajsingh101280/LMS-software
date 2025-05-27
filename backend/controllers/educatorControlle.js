@@ -1,4 +1,4 @@
-import { clerkClient } from "@clerk/express"
+
 import Course from "../models/Course.js"
 import { v2 as cloudinary } from "cloudinary"
 import Purchase from "../models/purchase.js"
@@ -10,14 +10,14 @@ import User from "../models/user.js"
 export const updateRoleToEducator = async (req, res) => {
 
     try {
-        const userId = req.auth.userId
+        const user = req.user
 
-        await clerkClient.users.updateUserMetadata(userId, {
+        if (!user) {
 
-            publicMetadata: {
-                role: "educator",
-            }
-        })
+            return res.status(400).json({ success: false, message: "user not found" })
+        }
+
+        await User.findByIdAndUpdate(user._id, { role: "educator" })
 
         return res.status(200).json({ success: true, message: "You can publish a course now" })
 
@@ -34,7 +34,7 @@ export const updateRoleToEducator = async (req, res) => {
 
 export const addCourse = async (req, res) => {
     try {
-        const educatorId = req.auth.userId;
+        const educatorId = req.user._id
         const imageFile = req.file;
 
         if (!imageFile) {
@@ -52,7 +52,7 @@ export const addCourse = async (req, res) => {
         await newCourse.save();
 
         console.log("Course added successfully", newCourse);
-        return res.json({ success: true, message: "Course Added" });
+        return res.status(200).json({ success: true, message: "Course Added" });
     } catch (error) {
         console.log("Error in adding course", error.message);
         return res.status(500).json({ success: false, message: error.message });
@@ -67,7 +67,7 @@ export const getEducatorCourses = async (req, res) => {
 
 
     try {
-        const educator = req.auth.userId
+        const educator = req.user._id
 
 
 
@@ -103,7 +103,7 @@ export const educatorDashboardData = async (req, res) => {
     try {
 
 
-        const educator = req.auth.userId
+        const educator = req.user._id
         const courses = await Course.find({ educator })
         const totalCourses = courses.length
 
@@ -114,7 +114,7 @@ export const educatorDashboardData = async (req, res) => {
 
         const purchases = await Purchase.find({
 
-            courseId: { $In: courseIds },
+            courseId: { $in: courseIds },
             status: "completed"
 
 
@@ -129,7 +129,7 @@ export const educatorDashboardData = async (req, res) => {
 
             const students = await User.find({
 
-                _id: { $In: course.enrolledStudents },
+                _id: { $in: course.enrolledStudents },
 
 
 
@@ -178,3 +178,48 @@ export const educatorDashboardData = async (req, res) => {
 
 
 }
+
+
+// get enrolled student data with purchase data
+export const getEnrolledStuedntData = async (req, res) => {
+
+
+    try {
+
+
+
+
+        const educator = req.user._id
+
+        const courses = await Course.find({ educator })
+
+        const courseIds = courses.map(course => course._id)
+
+        const purchases = await Purchase.find({
+            courseId: { $in: courseIds },
+            status: "completed"
+
+
+
+        }).populate("userId", "name imageUrl").populate("courseId", "courseTitle")
+        const enrolledStudents = purchases.map(purchase => ({
+            student: purchase.userId,
+            courseTitle: purchase.courseId.courseTitle,
+            purchaseDate: purchase.createdAt
+
+
+
+        }))
+        res.json({ success: true, enrolledStudents })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ success: false, message: "Internal Server Error" })
+    }
+
+
+
+
+}
+
+

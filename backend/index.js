@@ -2,10 +2,11 @@ import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
 import connectToDatabase from "./database/db.js";
-import { clerkWebhook } from "./controllers/webhooks.js";
 import educatorRouter from "./routes/educatorRoute.js";
-import { clerkMiddleware, requireAuth } from "@clerk/express";
 import connectCloudinary from "./config/cloudinary.js";
+import courseRouter from "./routes/courseRoute.js"
+import authRouter from "./routes/authRoutes.js"
+import cookieParser from "cookie-parser";
 dotenv.config()
 
 // app instance 
@@ -16,11 +17,9 @@ const app = express();
 // middlewares
 app.use(express.json())
 app.use(cors())
-app.use(clerkMiddleware())
-app.use(requireAuth())
+app.use(cookieParser())
 
 // routes
-app.post("/clerk", express.raw({ type: "application/json" }), clerkWebhook)
 
 
 
@@ -30,18 +29,13 @@ app.get("/", (req, res) => {
     res.send("Api is working ")
 
 })
-// app.get("/me", requireAuth(), (req, res) => {
 
-
-
-//     console.log("Authenticated user", req.auth.userId)
-//     res.send(req.auth.userId)
-// })
+app.use("/api/auth", authRouter)
 app.use("/api/educator", educatorRouter)
-
+app.use("/api/course", courseRouter)
 // connect to cloudinary
 
-await connectCloudinary()
+
 
 // port
 const port = process.env.PORT

@@ -1,4 +1,4 @@
-import { clerkClient } from "@clerk/express"
+import User from "../models/user.js"
 
 
 // Middleware {protecte educator routes}
@@ -9,10 +9,16 @@ export const protectEducator = async (req, res, next) => {
 
 
     try {
-        const userId = req.auth.userId
-        const response = await clerkClient.users.getUser(userId)
+        const userId = req.user._id
+        const user = await User.findById(userId)
 
-        if (response.publicMetadata.role != "educator") {
+        if (!user) {
+
+            return res.status(400).json({ success: false, message: "User not found" })
+
+        }
+
+        if (user.role !== "educator") {
 
             return res.json({ success: false, message: "Unauthorised Access" })
         }
