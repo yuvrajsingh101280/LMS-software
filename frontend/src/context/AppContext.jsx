@@ -3,19 +3,19 @@ import { createContext } from "react";
 import { dummyCourses } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import humanizedDuration from "humanize-duration";
-import { useAuth, useUser } from "@clerk/clerk-react";
+import axios from "axios";
 export const Appcontext = createContext();
 
 export const AppContextPovider = ({ children }) => {
   const currency = import.meta.env.VITE_CURRENCY;
   const navigate = useNavigate();
-  const { getToken } = useAuth();
-  const { user } = useUser();
 
+  const [user, setUser] = useState(null);
+  const [isEducator, setIsEducator] = useState(false);
   const [allCourses, setAllCourse] = useState([]);
-  const [isEducator, setIsEducator] = useState(true);
-  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
   // fetch all courses
   const fetchAllCourses = async () => {
     setAllCourse(dummyCourses);
@@ -75,14 +75,29 @@ export const AppContextPovider = ({ children }) => {
     fetchAllCourses();
     fetchUserEnrolledCourses();
   }, []);
-  const logToken = async () => {
-    console.log(await getToken());
+  // get the user if available
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/api/auth/profile", {
+        withCredentials: true,
+      });
+      console.log(res);
+      if (res.data.success) {
+        setUser(res.data.user);
+        setIsEducator(res.data.user?.role === "educator");
+      } else {
+        setUser(null);
+        setIsEducator(false);
+      }
+    } catch (error) {
+      setUser(null);
+      setIsEducator(false);
+      console.error("Error fetching user profile:", error);
+    }
   };
   useEffect(() => {
-    if (user) {
-      logToken();
-    }
-  }, [user]);
+    fetchUser();
+  }, []);
 
   const value = {
     currency,
@@ -91,12 +106,16 @@ export const AppContextPovider = ({ children }) => {
     calculateRating,
     isEducator,
     setIsEducator,
-
+    user,
+    setUser,
     calculateChapterTime,
     calculateCourseDuration,
     calculateNoOfLectures,
     enrolledCourses,
     fetchUserEnrolledCourses,
+    loading,
+    setLoading,
+    fetchUser,
   };
   return <Appcontext.Provider value={value}>{children}</Appcontext.Provider>;
 };

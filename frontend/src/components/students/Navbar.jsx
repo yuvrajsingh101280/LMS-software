@@ -1,15 +1,47 @@
 import React, { useContext } from "react";
 import { assets } from "../../assets/assets";
-import { Link } from "react-router-dom";
-import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+import { Link, useLocation } from "react-router-dom";
 import { Appcontext } from "../../context/AppContext";
 import { SiSemanticscholar } from "react-icons/si";
+import axios from "axios";
+import { IoLogOut } from "react-icons/io5";
 const Navbar = () => {
+  const location = useLocation();
   const isCourseListPage = location.pathname.includes("/course-list");
+  const { navigate, user, setUser, isEducator, setIsEducator } =
+    useContext(Appcontext);
 
-  const { openSignIn } = useClerk();
-  const { user } = useUser();
-  const { navigate, isEducator } = useContext(Appcontext);
+  // ✅ Handle Role Update
+  const handleBecomeEducator = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:8000/api/educator/update-role",
+        {
+          withCredentials: true,
+        }
+      );
+      alert("You are now a Educator");
+      setIsEducator(true);
+
+      if (res.data.success) {
+        setUser(res.data.user); // ✅ Update user in context
+      }
+    } catch (error) {
+      console.error("Error updating role:", error.message);
+    }
+  };
+
+  // ✅ Logout Function
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:8000/api/auth/logout", null, {
+        withCredentials: true,
+      });
+      setUser(null); // Clear user from context
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   return (
     <div
@@ -33,7 +65,9 @@ const Navbar = () => {
             <div className="flex justify-center items-center gap-2">
               <SiSemanticscholar fill="black" size={20} />
               <button
-                onClick={() => navigate("/educator")}
+                onClick={() =>
+                  isEducator ? navigate("/educator/") : handleBecomeEducator()
+                }
                 className="cursor-pointer hover:text-indigo-600"
               >
                 {isEducator ? "Educator Dashboard" : "Become Educator"}
@@ -43,37 +77,56 @@ const Navbar = () => {
             <Link to={"/my-enrollments"} className="hover:text-indigo-600">
               My Enrollments
             </Link>
+            |
+            <button
+              onClick={handleLogout}
+              className="hover:text-red-600 cursor-pointer"
+            >
+              <IoLogOut className="w-5 h-5" />
+            </button>
           </>
         )}
-        {user ? (
-          <UserButton />
-        ) : (
+
+        {!user && (
           <button
-            onClick={() => openSignIn()}
+            onClick={() => navigate("/signup")}
             className="bg-indigo-600 cursor-pointer text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition-all duration-200"
           >
             Create Account
           </button>
         )}
       </div>
+      {user?.profilePic && (
+        <div className="hidden md:block md:w-10 md:h-10 rounded-full overflow-hidden">
+          <img
+            src={user.profilePic}
+            alt="User Profile"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
 
       {/* Mobile View */}
       <div className="md:hidden flex items-center gap-2 sm:gap-4 text-gray-700 text-sm">
         {user && (
           <>
             <button
-              onClick={() => navigate("/educator")}
+              onClick={() =>
+                isEducator ? navigate("/educator") : handleBecomeEducator()
+              }
               className="cursor-pointer"
             >
               {isEducator ? "Dashboard" : "Educator"}
             </button>
             <Link to={"/my-enrollments"}>Enrollments</Link>
+            <button onClick={handleLogout}>
+              {" "}
+              <IoLogOut className="w-5 h-5" />
+            </button>
           </>
         )}
-        {user ? (
-          <UserButton />
-        ) : (
-          <button onClick={() => openSignIn()}>
+        {!user && (
+          <button onClick={() => navigate("/signup")}>
             <img src={assets.user_icon} alt="Sign In" />
           </button>
         )}

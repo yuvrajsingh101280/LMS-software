@@ -13,17 +13,23 @@ import MyCourses from "./pages/educator/MyCourses";
 import AddCourse from "./pages/educator/AddCourse";
 import Navbar from "./components/students/Navbar";
 import "quill/dist/quill.snow.css";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 const App = () => {
   const location = useLocation();
 
   const isEducatorRoute = location.pathname.startsWith("/educator");
-
+  const isAuthRoute =
+    location.pathname === "/login" || location.pathname === "/signup";
   return (
     <div>
-      {!isEducatorRoute && <Navbar />}
+      {!isEducatorRoute && !isAuthRoute && <Navbar />}
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
         <Route path="/course-list" element={<CoursesList />} />
         <Route path="/course-list/:input" element={<CoursesList />} />
         <Route path="/course/:id" element={<CourseDetails />} />

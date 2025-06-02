@@ -19,7 +19,7 @@ export const updateRoleToEducator = async (req, res) => {
 
         await User.findByIdAndUpdate(user._id, { role: "educator" })
 
-        return res.status(200).json({ success: true, message: "You can publish a course now" })
+        return res.status(200).json({ success: true, message: "You can publish a course now", user: { ...user._doc, password: undefined } })
 
     } catch (error) {
         console.log(error.message)

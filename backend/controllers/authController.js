@@ -47,7 +47,7 @@ export const signup = async (req, res) => {
         const newUser = await User.create({ name, email, password: hashedPassword, profilePic: upload.secure_url })
 
         await generateTokenAndSetCookie(newUser._id, res)
-        res.status(200).json({ success: true, message: "User created" })
+        res.status(200).json({ success: true, message: "User created", user: { ...newUser._doc, password: undefined } })
 
 
 
@@ -127,5 +127,24 @@ export const logout = async (req, res) => {
         return res.status(500).json({ success: false, message: "Logged out unsuccessfull" })
 
     }
+
+}
+export const getProfile = async (req, res) => {
+    try {
+        const user = req.user;
+        console.log(user)
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        res.status(200).json({
+            success: true,
+            user,
+        });
+    } catch (error) {
+        console.error("Get Profile Error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+
 
 }
