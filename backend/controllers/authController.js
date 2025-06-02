@@ -129,22 +129,3 @@ export const logout = async (req, res) => {
     }
 
 }
-export const getProfile = async (req, res) => {
-    try {
-        const user = req.user;
-        console.log(user)
-        if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
-        }
-
-        res.status(200).json({
-            success: true,
-            user,
-        });
-    } catch (error) {
-        console.error("Get Profile Error:", error);
-        res.status(500).json({ success: false, message: "Server error" });
-    }
-
-
-}

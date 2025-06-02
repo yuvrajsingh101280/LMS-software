@@ -7,6 +7,7 @@ import connectCloudinary from "./config/cloudinary.js";
 import courseRouter from "./routes/courseRoute.js"
 import authRouter from "./routes/authRoutes.js"
 import cookieParser from "cookie-parser";
+import userRouter from "./routes/userRoutes.js"
 dotenv.config()
 
 // app instance 
@@ -37,6 +38,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRouter)
 app.use("/api/educator", educatorRouter)
 app.use("/api/course", courseRouter)
+app.use("/api/user", userRouter)
 // connect to cloudinary
 
 

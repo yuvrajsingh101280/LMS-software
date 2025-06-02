@@ -78,7 +78,7 @@ export const AppContextPovider = ({ children }) => {
   // get the user if available
   const fetchUser = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/auth/profile", {
+      const res = await axios.get("http://localhost:8000/api/user/data", {
         withCredentials: true,
       });
       console.log(res);
