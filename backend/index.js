@@ -8,6 +8,7 @@ import courseRouter from "./routes/courseRoute.js"
 import authRouter from "./routes/authRoutes.js"
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/userRoutes.js"
+import { stripeWebhooks } from "./controllers/webhook.js";
 dotenv.config()
 
 // app instance 
@@ -39,6 +40,7 @@ app.use("/api/auth", authRouter)
 app.use("/api/educator", educatorRouter)
 app.use("/api/course", courseRouter)
 app.use("/api/user", userRouter)
+app.post("/stripe", express.raw({ type: 'application/json' }), stripeWebhooks)
 // connect to cloudinary
 
 
