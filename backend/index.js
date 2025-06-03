@@ -1,67 +1,55 @@
-import express from "express"
-import dotenv from "dotenv"
-import cors from "cors"
-import connectToDatabase from "./database/db.js";
-import educatorRouter from "./routes/educatorRoute.js";
-import connectCloudinary from "./config/cloudinary.js";
-import courseRouter from "./routes/courseRoute.js"
-import authRouter from "./routes/authRoutes.js"
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
 import cookieParser from "cookie-parser";
-import userRouter from "./routes/userRoutes.js"
-import { stripeWebhooks } from "./controllers/webhook.js";
-dotenv.config()
+import connectToDatabase from "./database/db.js";
+import connectCloudinary from "./config/cloudinary.js";
 
-// app instance 
+import educatorRouter from "./routes/educatorRoute.js";
+import courseRouter from "./routes/courseRoute.js";
+import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
+import { stripeWebhooks } from "./controllers/webhook.js";
+
+dotenv.config();
+
 const app = express();
-// connect to database
-// await connectToDatabase()
-app.post("/stripe", express.raw({ type: 'application/json' }), stripeWebhooks)
-// middlewares
-app.use(express.json())
+
+// Connect to database and cloudinary
+await connectToDatabase();
+await connectCloudinary();
+
+// Stripe webhook route - must be before express.json()
+app.post("/stripe", express.raw({ type: 'application/json' }), stripeWebhooks);
+
+// Middlewares
+app.use(express.json()); // after /stripe
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: "http://localhost:5173",
     credentials: true
 }));
+app.use(cookieParser());
 
-app.use(cookieParser())
-
-// routes
-
-
-
-
+// Routes
 app.get("/", (req, res) => {
+    res.send("API is working");
+});
 
-    res.send("Api is working ")
+app.use("/api/auth", authRouter);
+app.use("/api/educator", educatorRouter);
+app.use("/api/course", courseRouter);
+app.use("/api/user", userRouter);
 
-})
+// Optional: Error handler
+app.use((err, req, res, next) => {
+    console.error("❌ Error:", err.message);
+    res.status(500).json({ message: "Internal Server Error" });
+});
 
-app.use("/api/auth", authRouter)
-app.use("/api/educator", educatorRouter)
-app.use("/api/course", courseRouter)
-app.use("/api/user", userRouter)
-
-// connect to cloudinary
-
-
-
-// port
-const port = process.env.PORT
-const startServer = async () => {
-    try {
-        // connect to cloudinary
-
-        await connectCloudinary()
-
-        await connectToDatabase(); // Ensures MongoDB connection is live
-        app.listen(port, () => {
-            console.log(`Server running on http://localhost:${port}`);
-        });
-    } catch (err) {
-        console.error("Failed to connect to MongoDB", err.message);
-    }
-};
-
-startServer();
+// Server listener
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});
 
 export default app;
