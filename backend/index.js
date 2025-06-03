@@ -15,7 +15,7 @@ dotenv.config()
 const app = express();
 // connect to database
 // await connectToDatabase()
-
+app.post("/stripe", express.raw({ type: 'application/json' }), stripeWebhooks)
 // middlewares
 app.use(express.json())
 app.use(cors({
@@ -40,7 +40,7 @@ app.use("/api/auth", authRouter)
 app.use("/api/educator", educatorRouter)
 app.use("/api/course", courseRouter)
 app.use("/api/user", userRouter)
-app.post("/stripe", express.raw({ type: 'application/json' }), stripeWebhooks)
+
 // connect to cloudinary
 
 
