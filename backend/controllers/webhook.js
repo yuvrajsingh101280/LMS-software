@@ -8,9 +8,7 @@ dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const stripeWebhooks = async (request, response) => {
-    console.log("👉 typeof req.body:", typeof request.body);
-    console.log("👉 isBuffer:", Buffer.isBuffer(request.body));
-    console.log(request.body)
+
     const sig = request.headers['stripe-signature'];
     let event;
 
@@ -21,9 +19,9 @@ export const stripeWebhooks = async (request, response) => {
             process.env.STRIPE_WEBHOOK_SECRET
         );
 
-        console.log("✅ Webhook received:", event.type);
+
     } catch (err) {
-        console.error("❌ Webhook signature verification failed:", err.message);
+        console.error("Webhook signature verification failed:", err.message);
         return response.status(400).send(`Webhook Error: ${err.message}`);
     }
 
@@ -41,7 +39,7 @@ export const stripeWebhooks = async (request, response) => {
 
                     const purchaseData = await Purchase.findById(purchaseId);
                     if (!purchaseData) {
-                        console.warn("⚠️ Purchase not found for ID:", purchaseId);
+                        console.warn("Purchase not found for ID:", purchaseId);
                         break;
                     }
 
@@ -62,9 +60,9 @@ export const stripeWebhooks = async (request, response) => {
                     purchaseData.status = "completed";
                     await purchaseData.save();
 
-                    console.log("✅ Payment completed: User enrolled and purchase updated.");
+                    console.log("Payment completed: User enrolled and purchase updated.");
                 } catch (error) {
-                    console.error("❌ Error in checkout.session.completed:", error.message);
+                    console.error(" Error in checkout.session.completed:", error.message);
                 }
                 break;
             }
@@ -77,18 +75,18 @@ export const stripeWebhooks = async (request, response) => {
                     if (purchaseData) {
                         purchaseData.status = "failed";
                         await purchaseData.save();
-                        console.log("⚠️ Payment failed: Purchase marked as failed.");
+                        console.log("Payment failed: Purchase marked as failed.");
                     } else {
-                        console.warn("⚠️ Expired session: Purchase not found for ID:", purchaseId);
+                        console.warn("Expired session: Purchase not found for ID:", purchaseId);
                     }
                 } catch (error) {
-                    console.error("❌ Error in checkout.session.expired:", error.message);
+                    console.error(" Error in checkout.session.expired:", error.message);
                 }
                 break;
             }
 
             default:
-                console.log(`ℹ️ Unhandled event type: ${event.type}`);
+                console.log(`Unhandled event type: ${event.type}`);
         }
     })();
 };
