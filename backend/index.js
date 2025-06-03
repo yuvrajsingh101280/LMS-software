@@ -23,11 +23,11 @@ await connectCloudinary();
 app.post("/stripe", express.raw({ type: 'application/json' }), stripeWebhooks);
 
 // Middlewares
-app.use(express.json()); // after /stripe
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true
 }));
+app.use(express.json()); // after /stripe
 app.use(cookieParser());
 
 // Routes

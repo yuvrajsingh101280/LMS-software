@@ -8,6 +8,8 @@ dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const stripeWebhooks = async (request, response) => {
+    console.log("👉 typeof req.body:", typeof request.body);
+    console.log("👉 isBuffer:", Buffer.isBuffer(request.body));
     const sig = request.headers['stripe-signature'];
     let event;
 
@@ -17,6 +19,7 @@ export const stripeWebhooks = async (request, response) => {
             sig,
             process.env.STRIPE_WEBHOOK_SECRET
         );
+
         console.log("✅ Webhook received:", event.type);
     } catch (err) {
         console.error("❌ Webhook signature verification failed:", err.message);
