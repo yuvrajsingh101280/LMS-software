@@ -20,7 +20,7 @@ await connectToDatabase();
 await connectCloudinary();
 
 // Stripe webhook route - must be before express.json()
-app.post("/stripe", express.raw({ type: 'application/json' }), stripeWebhooks);
+app.post("/stripe", express.json({ type: 'application/json' }), stripeWebhooks);
 
 // Middlewares
 app.use(cors({
