@@ -15,6 +15,7 @@ import Navbar from "./components/students/Navbar";
 import "quill/dist/quill.snow.css";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
+import { Toaster } from "react-hot-toast";
 const App = () => {
   const location = useLocation();
 
@@ -24,7 +25,7 @@ const App = () => {
   return (
     <div>
       {!isEducatorRoute && !isAuthRoute && <Navbar />}
-
+      <Toaster position="top-right" reverseOrder={false} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

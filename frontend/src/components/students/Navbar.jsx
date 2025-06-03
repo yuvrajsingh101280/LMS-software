@@ -5,28 +5,27 @@ import { Appcontext } from "../../context/AppContext";
 import { SiSemanticscholar } from "react-icons/si";
 import axios from "axios";
 import { IoLogOut } from "react-icons/io5";
+import toast from "react-hot-toast";
 const Navbar = () => {
   const location = useLocation();
   const isCourseListPage = location.pathname.includes("/course-list");
-  const { navigate, user, setUser, isEducator, setIsEducator } =
+  const { navigate, user, setUser, isEducator, setIsEducator, backendUrl } =
     useContext(Appcontext);
 
   // ✅ Handle Role Update
   const handleBecomeEducator = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/educator/update-role",
-        {
-          withCredentials: true,
-        }
-      );
-      alert("You are now a Educator");
-      setIsEducator(true);
+      const res = await axios.get(backendUrl + "/api/educator/update-role", {
+        withCredentials: true,
+      });
 
       if (res.data.success) {
+        setIsEducator(true);
         setUser(res.data.user); // ✅ Update user in context
+        toast.success(res.data.message);
       }
     } catch (error) {
+      toast.error(error.message);
       console.error("Error updating role:", error.message);
     }
   };

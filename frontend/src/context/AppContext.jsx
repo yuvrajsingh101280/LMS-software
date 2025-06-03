@@ -4,21 +4,32 @@ import { dummyCourses } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import humanizedDuration from "humanize-duration";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 export const Appcontext = createContext();
 
 export const AppContextPovider = ({ children }) => {
   const currency = import.meta.env.VITE_CURRENCY;
   const navigate = useNavigate();
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [user, setUser] = useState(null);
   const [isEducator, setIsEducator] = useState(false);
   const [allCourses, setAllCourse] = useState([]);
 
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [loading, setLoading] = useState(false);
+
   // fetch all courses
   const fetchAllCourses = async () => {
-    setAllCourse(dummyCourses);
+    try {
+      const { data } = await axios.get(backendUrl + "/api/course/all");
+      if (data.success) {
+        setAllCourse(data.courses);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   // function to calculate the average rating of course
@@ -31,7 +42,7 @@ export const AppContextPovider = ({ children }) => {
     course.courseRatings.forEach((rating) => {
       totalRating += rating.rating;
     });
-    return totalRating / course.courseRatings.length;
+    return Math.floor(totalRating / course.courseRatings.length);
   };
   // function to calculate course chapter time
 
@@ -68,7 +79,20 @@ export const AppContextPovider = ({ children }) => {
   // fetch user enrolled courses
 
   const fetchUserEnrolledCourses = async () => {
-    setEnrolledCourses(dummyCourses);
+    try {
+      const { data } = await axios.get(
+        backendUrl + "/api/user/enrolled-courses",
+        { withCredentials: true }
+      );
+      if (data.success) {
+        setEnrolledCourses(data.enrolledCourses.reverse());
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -78,20 +102,22 @@ export const AppContextPovider = ({ children }) => {
   // get the user if available
   const fetchUser = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/user/data", {
+      const res = await axios.get(backendUrl + "/api/user/data", {
         withCredentials: true,
       });
-      console.log(res);
+
       if (res.data.success) {
         setUser(res.data.user);
         setIsEducator(res.data.user?.role === "educator");
       } else {
+        toast.error(res.data.error);
         setUser(null);
         setIsEducator(false);
       }
     } catch (error) {
       setUser(null);
       setIsEducator(false);
+      toast.error(error.message);
       console.error("Error fetching user profile:", error);
     }
   };
@@ -116,6 +142,7 @@ export const AppContextPovider = ({ children }) => {
     loading,
     setLoading,
     fetchUser,
+    backendUrl,
   };
   return <Appcontext.Provider value={value}>{children}</Appcontext.Provider>;
 };

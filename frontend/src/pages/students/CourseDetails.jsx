@@ -6,6 +6,8 @@ import { assets } from "../../assets/assets";
 import humanizeDuration from "humanize-duration";
 import Footer from "../../components/students/Footer";
 import YouTube from "react-youtube";
+import toast from "react-hot-toast";
+import axios from "axios";
 const CourseDetails = () => {
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
@@ -19,17 +21,57 @@ const CourseDetails = () => {
     calculateCourseDuration,
     currency,
     calculateNoOfLectures,
+    backendUrl,
+    user,
   } = useContext(Appcontext);
+  const fetchCourseData = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/course/" + id);
+      console.log(data);
+      if (data.success) {
+        setCourseData(data.courseData);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // enroll courses
+
+  const enrollCourse = async () => {
+    try {
+      if (!user) {
+        return toast.error("Login to enroll");
+      }
+      if (isAlreadyEnrolled) {
+        return toast.error("Already enrolled");
+      }
+
+      const { data } = await axios.post(backendUrl + "/api/user/purchase", {
+        courseId: courseData._id,
+      });
+      if (data.success) {
+        const { session_url } = data;
+        window.location.replace(session_url);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   // Fetch Course Data inside useEffect
   useEffect(() => {
-    const fetchCourseData = async () => {
-      const findCourse = allCourses.find((course) => course._id === id);
-      setCourseData(findCourse || null);
-    };
-
     fetchCourseData();
-  }, [allCourses, id]);
+  }, []);
+  useEffect(() => {
+    if (user && courseData) {
+      setIsAlreadyEnrolled(user.enrolledCourses.includes(courseData._id));
+    }
+  }, [user, courseData]);
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({
@@ -90,7 +132,10 @@ const CourseDetails = () => {
             </div>
 
             <p className="text-sm">
-              Course by <span className="text-blue-600">Yuvraj Singh</span>
+              Course by{" "}
+              <span className="text-blue-600">
+                {courseData?.educator?.name || "Bulan"}
+              </span>
             </p>
 
             {/* Course Structure */}
@@ -250,7 +295,10 @@ const CourseDetails = () => {
                   <p>{calculateNoOfLectures(courseData)} lectures</p>
                 </div>
               </div>
-              <button className="md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white  font-medium">
+              <button
+                onClick={enrollCourse}
+                className="md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white  font-medium"
+              >
                 {isAlreadyEnrolled ? "Already Enrolled" : "Enroll Now"}
               </button>
               <div className="pt-6">

@@ -4,6 +4,7 @@ import { Appcontext } from "../../context/AppContext";
 import { Link } from "react-router-dom";
 
 const CourseCard = ({ course }) => {
+  console.log(course.educator);
   const { currency, calculateRating } = useContext(Appcontext);
   return (
     <Link
@@ -15,7 +16,7 @@ const CourseCard = ({ course }) => {
 
       <div className="p-3 text-left">
         <h3 className="text-base font-semibold">{course.courseTitle}</h3>
-        <p className="text-gray-500">Bulan</p>
+        <p className="text-gray-500">{course?.educator?.name || "Bulan"}</p>
         <div className="flex items-center space-x-2">
           <p>{calculateRating(course)}</p>
           <div className="flex items-center">
