@@ -49,17 +49,25 @@ const CourseDetails = () => {
         return toast.error("Already enrolled");
       }
 
-      const { data } = await axios.post(backendUrl + "/api/user/purchase", {
-        courseId: courseData._id,
-      });
+      const { data } = await axios.post(
+        "http://localhost:8000/api/user/purchase",
+        {
+          courseId: courseData._id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       if (data.success) {
         const { session_url } = data;
         window.location.replace(session_url);
       } else {
         toast.error(data.message);
+        console.log(error);
       }
     } catch (error) {
       toast.error(error.message);
+      console.log(error);
     }
   };
 

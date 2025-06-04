@@ -6,18 +6,38 @@ import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
 import Footer from "../../components/students/Footer";
 import Rating from "../../components/students/Rating";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Loading from "../../components/students/Loading";
 
 const Player = () => {
-  const { enrolledCourses, calculateChapterTime } = useContext(Appcontext);
+  const {
+    enrolledCourses,
+    calculateChapterTime,
+    backendUrl,
+    user,
+    fetchUserEnrolledCourses,
+  } = useContext(Appcontext);
   const { courseId } = useParams();
 
   const [courseData, setCourseData] = useState(null);
   const [openSections, setOpenSections] = useState({});
   const [playerData, setPlayerData] = useState(null);
+  const [progressData, setProgressData] = useState(null);
+  const [initialRating, setInitialRating] = useState(0);
 
   const getCourseData = () => {
     const course = enrolledCourses.find((course) => course._id === courseId);
-    if (course) setCourseData(course);
+    console.log(course);
+    if (course) {
+      setCourseData(course);
+
+      course.courseRatings.map((item) => {
+        if (item.userId === user._id) {
+          setInitialRating(item.rating);
+        }
+      });
+    }
   };
 
   const toggleSection = (index) => {
@@ -28,10 +48,74 @@ const Player = () => {
   };
 
   useEffect(() => {
-    getCourseData();
+    if (enrolledCourses.length > 0) {
+      getCourseData();
+    }
   }, [enrolledCourses, courseId]);
+  const markLectureAsCompleted = async (lectureId) => {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/api/user/update-course-progress",
+        { courseId, lectureId },
+        {
+          withCredetials: true,
+        }
+      );
 
-  return (
+      if (data.success) {
+        toast.success(data.message);
+        getCourseProgress();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  const getCourseProgress = async () => {
+    try {
+      const { data } = await axios.post(
+        `http://localhost:8000/api/user/get-course-progress`,
+        { courseId },
+        { withCredentials: true }
+      );
+      if (data.success) {
+        setProgressData(data.progressData);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message);
+    }
+  };
+  const handleRate = async (rating) => {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/api/user/add-rating",
+        { courseId, rating },
+        { withCredentials: true }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        fetchUserEnrolledCourses();
+      } else {
+        toast.error(data.message);
+        console.log(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getCourseProgress();
+  }, []);
+
+  return courseData ? (
     <>
       <div className="p-4 sm:p-10 md:grid md:grid-cols-2 gap-10 md:px-36">
         {/* left column */}
@@ -82,7 +166,12 @@ const Player = () => {
                         >
                           <img
                             src={
-                              false ? assets.blue_tick_icon : assets.play_icon
+                              progressData &&
+                              progressData.lectureCompleted.includes(
+                                playerData.lectureId
+                              )
+                                ? assets.blue_tick_icon
+                                : assets.play_icon
                             }
                             alt="play icon"
                             className="w-4 h-4 mt-1"
@@ -124,7 +213,7 @@ const Player = () => {
 
           <div className="flex items-center gap-2 py-3 mt-10">
             <h1 className="text-xl font-bold">Rate this Course:</h1>
-            <Rating initialRating={0} />
+            <Rating initialRating={initialRating} onRate={handleRate} />
           </div>
         </div>
 
@@ -141,8 +230,14 @@ const Player = () => {
                   {playerData.chapter}.{playerData.lecture}.
                   {playerData.lectureTitle}
                 </p>
-                <button className="text-blue-600 cursor-pointer">
-                  {false ? "Completed" : "Mark Complete"}
+                <button
+                  onClick={() => markLectureAsCompleted(playerData.lectureId)}
+                  className="text-blue-600 cursor-pointer"
+                >
+                  {progressData &&
+                  progressData.lectureCompleted.includes(playerData.lectureId)
+                    ? "Completed"
+                    : "Mark Complete"}
                 </button>
               </div>
             </div>
@@ -153,6 +248,8 @@ const Player = () => {
       </div>
       <Footer />
     </>
+  ) : (
+    <Loading />
   );
 };
 
