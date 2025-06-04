@@ -2,19 +2,33 @@ import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../../components/educator/Navbar";
 import { Appcontext } from "../../context/AppContext";
 import Loading from "../../components/students/Loading";
+import axios from "axios";
 
 const MyCourses = () => {
   const { currency, allCourses } = useContext(Appcontext);
-
+  const { isEducator } = useContext(Appcontext);
   const [courses, setCourses] = useState(null);
 
   const fetchEducatorcourses = async () => {
-    setCourses(allCourses);
+    try {
+      const { data } = await axios.get(
+        "http://localhost:8000/api/educator/courses",
+        { withCredentials: true }
+      );
+      if (data.success) {
+        setCourses(data.courses);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error.message);
+    }
   };
 
   useEffect(() => {
-    fetchEducatorcourses();
-  }, [courses]);
+    if (isEducator) {
+      fetchEducatorcourses();
+    }
+  }, [isEducator]);
 
   return courses ? (
     <div className="h-screen flex  flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0">

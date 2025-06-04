@@ -7,7 +7,7 @@ import protectRoutue from "../middlewares/protectRoute.js"
 const educatorRouter = express.Router()
 
 educatorRouter.get("/update-role", protectRoutue, updateRoleToEducator)
-educatorRouter.post("/add-course", upload.single("image"), protectRoutue, protectEducator, addCourse)
+educatorRouter.post("/add-course", protectRoutue, protectEducator, upload.single("image"), addCourse)
 educatorRouter.get("/courses", protectRoutue, protectEducator, getEducatorCourses)
 educatorRouter.get("/dashboard", protectRoutue, protectEducator, educatorDashboardData)
 educatorRouter.get("/enrolled-students", protectRoutue, protectEducator, getEnrolledStuedntData)

@@ -39,8 +39,13 @@ export const getCourseId = async (req, res) => {
     try {
 
         const courseData = await Course.findById(id).populate({ path: "educator" })
+        if (!courseData) {
+            return res.status(404).json({ success: false, message: "Course not found" });
+        }
+
+        const plainCourse = courseData.toObject(); // 🛠️ Convert to plain JS object
         // remove lecture url if isPreview is not free
-        courseData.courseContent.forEach((chapter) => {
+        plainCourse.courseContent.forEach((chapter) => {
 
             chapter.chapterContent.forEach(lecture => {
 

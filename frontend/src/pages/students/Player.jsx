@@ -58,7 +58,7 @@ const Player = () => {
         "http://localhost:8000/api/user/update-course-progress",
         { courseId, lectureId },
         {
-          withCredetials: true,
+          withCredentials: true,
         }
       );
 
@@ -168,7 +168,7 @@ const Player = () => {
                             src={
                               progressData &&
                               progressData.lectureCompleted.includes(
-                                playerData.lectureId
+                                lecture.lectureId
                               )
                                 ? assets.blue_tick_icon
                                 : assets.play_icon
